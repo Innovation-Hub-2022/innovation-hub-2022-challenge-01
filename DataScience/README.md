@@ -51,3 +51,57 @@ Resources:
 * [CBIR with Siamese networks](https://neptune.ai/blog/content-based-image-retrieval-with-siamese-networks) (also with the text input)
 * [Features extraction with Tensorflow (Decoder-Encoder and VGG)](https://www.analyticsvidhya.com/blog/2021/01/querying-similar-images-with-tensorflow/)
 * [Multimodal search](https://arxiv.org/pdf/1806.08896.pdf)
+
+
+# FORD image retrieval
+Possible car features
+ - Model (Fiesta, Focus, F150, Mustang, Mondeo)
+ - Type (Sedan, Hatchback, Crossover, etc)
+ - Color (white, red, black, blue, etc)
+ - Background (city, mountains, sea, nature, etc)
+ - interior or the exterior 
+ - Audience 1 (man, woman, child)
+ - Audience 2 (age - old or young)
+
+The idea is to be able to find the appropriate images from the DB based on the features above. 
+It means that the system would pay special attention to car's model, color, and other features above.
+
+The first task was chosen **CBIR** (Content Based Image Retrieval) - searching by the input image query.
+First approach to test for creating images' features was chosen - **Image classification architecture**, 
+as there are a lot SOTA architectures with pre-trained models.
+
+Benchmark approach:
+1. Features extraction - **VGG16** model pre-trained on [**CIFAR-10** dataset](https://www.cs.toronto.edu/~kriz/cifar.html)
+![plot](assets/vgg16-2.png)
+![plot](assets/cifar10.png)
+2. For searching metric **cosine similarity** was chosen
+3. Flask was used for application's UI
+
+**Some examples of the app**
+
+Input image
+![plot](assets/example1.PNG)
+
+Found similar images
+![plot](assets/example2.PNG)
+
+## Accuracy
+To measure the accuracy for our task we need images with labels of features above.
+Then we'd be able to run the application and check whether we are able to find similar images based on the requirements.
+Also, we'll need labelled dataset to fine-tune the model.
+
+## Dataset
+We've collect dataset in 3 different ways
+1. CreativeCommon Data - data scrapped manually for all types of features (images which can be used commercially)
+2. [Cars Dataset](http://ai.stanford.edu/~jkrause/cars/car_dataset.html) - >16K images with labeled model, year and type.
+All other features would be labelled using Neural Networks (NN) and human validation.
+Includes 196 models of cars (not only Ford)
+3. [Reezocar](https://www.reezocar.com/) - web-site for buying the cars. Collected around 15K of images with model, 
+type, year, color. All other features would be generating using NN and human validation.
+
+All these 3 ways of collecting the data is still in process.
+Based on it we'll be able to get the **Benchmark accuracy score** and improve the accuracy if needed by fine-tuning 
+the model based on the collected images.
+
+This task can be not only the solution for Ford cars, but also for any other cars and requirements.
+All in all, we are creating not only the solution, but also the pipeline for the Image retrieval task generally.

@@ -93,10 +93,10 @@ Also, we'll need labelled dataset to fine-tune the model.
 ## Dataset
 We've collect dataset in 3 different ways
 1. CreativeCommon Data - data scrapped manually for all types of features (images which can be used commercially)
-2. [Cars Dataset](http://ai.stanford.edu/~jkrause/cars/car_dataset.html) - >16K images with labeled model, year and type.
+2. [Cars Dataset](http://ai.stanford.edu/~jkrause/cars/car_dataset.html) - open-source dataset - >16K images with labeled model, year and type.
 All other features would be labelled using Neural Networks (NN) and human validation.
 Includes 196 models of cars (not only Ford)
-3. [Reezocar](https://www.reezocar.com/) - web-site for buying the cars. Collected around 15K of images with model, 
+3. [Auto Scout24](https://www.autoscout24.de/) - crawlers - web-site for selling the cars. Collected around 23K of images with model, 
 type, year, color. All other features would be generating using NN and human validation.
 
 All these 3 ways of collecting the data is still in process.

@@ -76,6 +76,7 @@ Benchmark approach:
 ![plot](assets/cifar10.png)
 2. For searching metric **cosine similarity** was chosen
 3. Flask was used for application's UI
+4. Elastic Search for storing and fast searching of the images 
 
 **Some examples of the app**
 

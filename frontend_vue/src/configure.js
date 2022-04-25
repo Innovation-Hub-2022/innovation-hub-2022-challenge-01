@@ -4,8 +4,8 @@ import AWS from 'aws-sdk';
 const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({
     apiVersion: '2016-04-18',
     region: "eu-west-2",
-    accessKeyId: 'AKIAWMQ6GGFRMBMRMZ4S', 
-    secretAccessKey: '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'
+    accessKeyId: '', 
+    secretAccessKey: ''
 });
 
 export const UserPool = new CognitoUserPool({

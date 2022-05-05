@@ -24,6 +24,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor } from './web-api/interceptors/jwt.interceptor';
 import { AuthGuard } from './web-api/services/auth.guard';
 import { HeaderComponent } from './layout/header/header.component';
+import { TokenResolverService } from './web-api/services/token-resolver.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -52,6 +53,7 @@ import { HeaderComponent } from './layout/header/header.component';
     PredictService,
     YearPickerComponent,
     AuthGuard,
+    TokenResolverService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

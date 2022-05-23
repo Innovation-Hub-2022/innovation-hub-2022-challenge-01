@@ -10,7 +10,7 @@ import { Auth } from 'aws-amplify';
 export class AwsCognitoService {
   constructor(private http: HttpClient) {}
 
-  public getTokenDetailsFromCognito(callbackCode: string): Observable<any> {
+  public exchangeCodeWithToken(callbackCode: string): Observable<any> {
     const details: any = {
       grant_type: 'authorization_code',
       client_id: "5ep3i10lbdv3bfgg8gl42mdj3v",
@@ -20,7 +20,7 @@ export class AwsCognitoService {
     };
     const formBody = Object.keys(details)
       .map(
-        (key) =>
+        (key: string) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(details[key])}`
       )
       .join('&');

@@ -17,7 +17,6 @@ export class TokenResolverService implements Resolve<any> {
 
     const urlParams: URLSearchParams = new URLSearchParams(window.location.search);
     const code:any = urlParams.get('code');
-console.log({code});
     if (!code) {
       return of(null);
     }
@@ -30,7 +29,7 @@ console.log({code});
   }
 
   private getTokenDetailsFromCognito(code: string): Observable<any | null> {
-    return this.awsCognitoService.getTokenDetailsFromCognito(code).pipe(
+    return this.awsCognitoService.exchangeCodeWithToken(code).pipe(
       switchMap((response: any) => {
         console.log('Response: ', response);
 

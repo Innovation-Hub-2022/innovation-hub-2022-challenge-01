@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-page',
@@ -69,5 +70,9 @@ export class LoginPageComponent implements AfterViewInit {
 
   public getUser(): Promise<any> {
     return Auth.currentUserInfo();
+  }
+
+  public navigateToDashboard(): void {
+    window.location.assign(environment.loginURL);
   }
 }

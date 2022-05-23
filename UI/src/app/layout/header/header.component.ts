@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CognitoService } from 'src/app/web-api/services/cognito.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -9,24 +10,24 @@ import { CognitoService } from 'src/app/web-api/services/cognito.service';
 })
 export class HeaderComponent {
   public userName = '';
+  public tokenDetails: any;
+  public token: any;
 
   constructor(public cognitoService: CognitoService, private router: Router) {
     this.getUser();
   }
 
-  public logOut() {
-    this.cognitoService.logOut().then(() => {
-      this.router.navigate(['login']);
-    });
+  public logout() {
+    window.location.assign(environment.logout);
   }
 
   public getUser() {
     this.cognitoService
       .getUser()
       .then(
-        (x) =>
+        (x) =>{
           (this.userName =
-            x?.attributes.family_name + ' ' + x?.attributes.given_name)
+            x.attributes.email)}
       )
       .catch((error) => {
         console.log('getUser ' + error);

@@ -1,6 +1,8 @@
 kubectl delete -f ingress.yaml
 kubectl delete -f 1-apiDotnet.yaml
-kubectl delete -f 1-apiPython.yaml
+
+call loadBalancer-down.cmd
+call externalDNS-down.cmd
 
 kubectl delete -f 0-cluster-autoscaler.yaml
 

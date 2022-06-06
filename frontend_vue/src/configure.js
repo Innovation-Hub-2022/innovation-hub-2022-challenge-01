@@ -1,16 +1,17 @@
-import {CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserAttribute} from "amazon-cognito-identity-js";
+import {CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserAttribute, CognitoRefreshToken} from "amazon-cognito-identity-js";
 import AWS from 'aws-sdk';
 
 const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({
     apiVersion: '2016-04-18',
     region: "eu-west-2",
-    accessKeyId: '', 
-    secretAccessKey: ''
+    accessKeyId: 'AKIAWMQ6GGFRMBMRMZ4S', 
+    secretAccessKey: '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'
 });
 
 export const UserPool = new CognitoUserPool({
     UserPoolId: 'eu-west-2_bAGNkXnPw',
-    ClientId: '7slijkpalrrthobi9cco5fsde8'
+    ClientId: '7slijkpalrrthobi9cco5fsde8',
+    //endpoint: 'https://d24mq5lqn3vtxk.cloudfront.net'
   });
 
 export const ListUsers = (callback) => 
@@ -34,10 +35,19 @@ export const ListUsers = (callback) =>
 
 };
 
-export const AuthenticateUser = (user, callback) =>
-{
-    var cognitoUser = new CognitoUser(
-    {
+export const RefreshSession = () => {
+    // debugger; // eslint-disable-line no-debugger
+    var currentUser = UserPool.getCurrentUser();
+    const refreshTokenName = currentUser.keyPrefix + '.' + currentUser.username + ".refreshToken";
+    var token = new CognitoRefreshToken({RefreshToken: currentUser.storage[refreshTokenName]})
+    currentUser.refreshSession(token, (err, session) => {
+        console.log(err, session);
+        console.log(session.getIdToken().getJwtToken());
+    })
+}
+
+export const AuthenticateUser = (user, callback) => {
+    var cognitoUser = new CognitoUser({
         Username: user.name,
         Pool: UserPool,
     });
@@ -64,19 +74,20 @@ export const AuthenticateUser = (user, callback) =>
 
     const authenticateUser_onSuccess = (result) =>
     {
-        //            debugger; // eslint-disable-line no-debugger
-        var accessToken = result.getAccessToken().getJwtToken();
-        console.log(accessToken);
-                      
-        cognitoUser.getUserAttributes((err, result) => {
-            if (err) {
-                alert(err.message || JSON.stringify(err));
-                return;
-            }
-            for (var i = 0; i < result.length; i++) {
-                console.log('attribute ' + result[i].getName() + ' has value ' + result[i].getValue());
-            }
-        });
+        //debugger; // eslint-disable-line no-debugger
+        var idToken = result.getIdToken().getJwtToken();
+        console.log("idToken will expired at:" + new Date(result.getIdToken().payload.exp * 1000).toISOString());
+        console.log(idToken);
+                              
+        // cognitoUser.getUserAttributes((err, result) => {
+        //     if (err) {
+        //         alert(err.message || JSON.stringify(err));
+        //         return;
+        //     }
+        //     for (var i = 0; i < result.length; i++) {
+        //         console.log('attribute ' + result[i].getName() + ' has value ' + result[i].getValue());
+        //     }
+        // });
         callback();
     }
 

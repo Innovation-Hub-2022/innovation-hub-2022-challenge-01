@@ -4,7 +4,6 @@
     <nav class="navbar navbar-dark bg-primary justify-content-between flex-nowrap flex-row">
       <div class="container">
         <a class="navbar-brand float-left">MENU</a>
-        <a class="navbar-brand flex-grow-1" v-if="currentUser!=null">Current user: {{currentUser.username}}</a>
         <ul class="nav navbar-nav flex-row float-right">
           <li class="nav-item">
             <router-link class="nav-link pr-3" to="/">Home</router-link>

@@ -1,0 +1,40 @@
+service: Challenge01AuthorizedBackend
+
+package:
+  artifact: ./AuthorizedBackend.zip
+
+provider:
+  name: aws
+  runtime: dotnetcore3.1
+  region: eu-west-2
+  deploymentBucket:
+    name: challenge-1
+ 
+functions:
+  challenge01-authorized-backend:
+    name: AuthorizedBackend
+    handler: AuthorizedBackend::AuthorizedBackend.LambdaEntryPoint::FunctionHandlerAsync
+    memorySize: 512
+    timeout: 30    
+    events:
+      - http: 
+          method: any
+          path: /{proxy+}
+          cors: true
+          authorizer:
+             type: COGNITO_USER_POOLS
+             authorizerId: 
+               Ref: ApiGatewayAuthorizer
+
+resources:
+  Resources:
+    ApiGatewayAuthorizer: 
+      Type: AWS::ApiGateway::Authorizer
+      Properties: 
+        Name: CognitoUserPool
+        Type: COGNITO_USER_POOLS
+        IdentitySource: method.request.header.X-COG-ID
+        RestApiId: 
+          Ref: ApiGatewayRestApi
+        ProviderARNs: 
+          - arn:aws:cognito-idp:eu-west-2:439223726434:userpool/eu-west-2_bAGNkXnPw

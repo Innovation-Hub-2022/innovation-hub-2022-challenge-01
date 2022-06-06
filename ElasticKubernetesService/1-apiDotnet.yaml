@@ -12,7 +12,7 @@ spec:
         app: api-dotnet
     spec:
       containers:
-      - image: olegzhel/challenge01api-dotnet:v0.9
+      - image: 439223726434.dkr.ecr.eu-west-2.amazonaws.com/challenge01api-dotnet:v0.10
         name: api-dotnet
         ports:
         - containerPort: 80

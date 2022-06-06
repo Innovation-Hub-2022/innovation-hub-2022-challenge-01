@@ -20,6 +20,19 @@ namespace dotnet.Controllers
         private static bool isCanceled;
         private readonly ILogger<ApiController> _logger;
         public ApiController(ILogger<ApiController> logger) => _logger = logger;
+        [HttpGet("freeget")]
+        public dynamic GetFree()
+        {
+            var ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
+            var ipAddresses = string.Join(";", ipHostInfo.AddressList.Where(a => !a.IsIPv6LinkLocal).Select(a => a.ToString()));
+            return new
+            {
+                Date = DateTime.Now,
+                Responser = GetType().Name,
+                IpAddresses = ipAddresses,
+                Status = "FreeGet is Ok"
+            };
+        }
 
         [HttpGet("gettest")]
         public dynamic GetTest()

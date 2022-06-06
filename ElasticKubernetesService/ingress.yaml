@@ -1,38 +1,45 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-hosts
-
+  name: challenge01.net
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/tags: Environment=test,Project=cognito
+    external-dns.alpha.kubernetes.io/hostname: challenge01.net 
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/auth-type: cognito
+    alb.ingress.kubernetes.io/auth-scope: openid
+    alb.ingress.kubernetes.io/auth-session-timeout: '3600'
+    alb.ingress.kubernetes.io/auth-session-cookie: AWSELBAuthSessionCookie
+    alb.ingress.kubernetes.io/auth-on-unauthenticated-request: authenticate
+    alb.ingress.kubernetes.io/auth-idp-cognito: '{"UserPoolArn": "arn:aws:cognito-idp:eu-west-2:439223726434:userpool/eu-west-2_bAGNkXnPw","UserPoolClientId":"5r58o1803smnagm4u45cjgils0","UserPoolDomain":"challenge01.auth.eu-west-2.amazoncognito.com"}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:439223726434:certificate/96f8d7f5-6ad9-4232-9cc2-f1463d76b233 
+    alb.ingress.kubernetes.io/target-type: 'ip'
 spec:
-  ingressClassName: kong
+  ingressClassName: alb
   rules:
-  - http:
-      paths:
-      - path: /api
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: api-dotnet
-            port: 
-              number: 80
-      - path: /api/getValue
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: api-python
-            port: 
-              number: 5000
-      - path: /api/getBulkValues
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: api-python
-            port: 
-              number: 5000
-      - path: /api/ping
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: api-python
-            port: 
-              number: 5000
+    - host: challenge01.net 
+      http:
+        paths:
+          - path: /api/freeget
+            pathType: Prefix
+            backend:
+              service:
+                name: api-dotnet
+                port: 
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port: 
+                  name: use-annotation
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-dotnet
+                port: 
+                  number: 80
